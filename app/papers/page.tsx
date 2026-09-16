@@ -1,56 +1,97 @@
-const papers = [
-  {
-    id: "MLRL-2026-0001",
-    title: "Learning Structured Representations for Machine Learning",
-    authors: "Alice Smith, Bob Zhang",
-    abstract:
-      "We study structured representations for improving learning efficiency and generalization.",
-    status: "Accepted",
-  },
-  {
-    id: "MLRL-2026-0002",
-    title: "Efficient Optimization for Large Models",
-    authors: "John Doe, Jane Smith",
-    abstract:
-      "This work investigates efficient optimization strategies for modern machine learning models.",
-    status: "Accepted",
-  },
-  {
-    id: "MLRL-2026-0003",
-    title: "Robust Learning under Distribution Shift",
-    authors: "David Lee et al.",
-    abstract:
-      "We investigate robust learning methods under changing data distributions.",
-    status: "Accepted",
-  },
-];
+import Link from "next/link";
+import reviewData from "@/data/STAGE3_META_REVIEW_DEMO.json";
 
 export default function PapersPage() {
+  const paper = reviewData;
+
   return (
-    <main className="form-container">
-      <h1>Accepted Papers</h1>
+    <main className="container">
+      <section className="page-section">
+        {/* Page Header */}
+        <div className="papers-header">
+          <h1>Papers</h1>
 
-      <p className="form-description">
-        Papers accepted to the workshop will be listed here.
-      </p>
+          <p className="page-description">
+            Browse submitted papers and their review results.
+          </p>
+        </div>
 
-      <div className="paper-list">
-        {papers.map((paper) => (
-          <article key={paper.id} className="paper-card">
-            <div className="paper-meta">
-              {paper.id} · {paper.status}
+        {/* Paper List */}
+        <div className="papers-list">
+          <article className="paper-card">
+
+            {/* Paper Information */}
+            <div className="paper-card-info">
+
+              <Link
+                href={`/papers/${paper.paper_id}`}
+                className="paper-id-link"
+              >
+                Paper ID: {paper.paper_id}
+              </Link>
+
+              <Link
+                href={`/papers/${paper.paper_id}`}
+                className="paper-card-title"
+              >
+                Paper {paper.paper_id}
+              </Link>
+
             </div>
 
-            <h3>{paper.title}</h3>
+            {/* Review Summary */}
+            <div className="review-badges">
 
-            <div className="paper-meta">
-              {paper.authors}
+              <div className="review-field">
+                <div className="review-field-label">
+                  Recommendation
+                </div>
+
+                <div className="review-field-value recommendation-value">
+                  {paper.meta_review.recommendation}
+                </div>
+              </div>
+
+              <div className="review-field">
+                <div className="review-field-label">
+                  Confidence
+                </div>
+
+                <div className="review-field-value confidence-value">
+                  {paper.meta_review.confidence}
+                </div>
+              </div>
+
             </div>
 
-            <p>{paper.abstract}</p>
+            {/* Meta Review Preview */}
+            <div className="paper-card-review">
+
+              <div className="paper-card-review-title">
+                Meta Review
+              </div>
+
+              <p>
+                {paper.meta_review.review.length > 400
+                  ? `${paper.meta_review.review.slice(0, 400)}...`
+                  : paper.meta_review.review}
+              </p>
+
+            </div>
+
+            {/* Action */}
+            <div className="paper-card-footer">
+              <Link
+                href={`/papers/${paper.paper_id}`}
+                className="button"
+              >
+                View Review
+              </Link>
+            </div>
+
           </article>
-        ))}
-      </div>
+        </div>
+      </section>
     </main>
   );
 }
